@@ -300,6 +300,7 @@ public class EvaluationService {
 	 * Acronyms)! Help generate some jargon by writing a program that converts a
 	 * long name like Portable Network Graphics to its acronym (PNG).
 	 */
+	
 	public String acronym(String phrase) {
 	   
 		String[] words = phrase.split(" |[-]");
@@ -312,7 +313,7 @@ public class EvaluationService {
 		return res;
 	}
 
-	/**
+	/** change
 	 * 12. Triangles
 	 * 
 	 * Determine if a triangle is equilateral, isosceles, or scalene. An equilateral
@@ -558,7 +559,7 @@ public class EvaluationService {
 	 * @param l The maximum value that could occur in the returned list
 	 * @return An ArrayList containing all prime numbers up to n;
 	 */
-	private static ArrayList<Long> getPrimeNumbersUpToN(long l){
+	public static ArrayList<Long> getPrimeNumbersUpToN(long l){
 		if(l < 1) return null;
 		ArrayList<Long> primeNumberList = new ArrayList<Long>();
 		primeNumberList.add((long) 2);
@@ -574,7 +575,7 @@ public class EvaluationService {
 	 * @param n The number being checked to see if it is prime
 	 * @return b true if n is prime and false if it is not
 	 */
-	private static boolean isPrime(long n) {
+	public static boolean isPrime(long n) {
 		if(n == 2) return true;
 		if(n % 2 == 0) return false;
 		for(int i = 2; i < n; i++) {
@@ -689,7 +690,9 @@ public class EvaluationService {
 	 */
 
 	public int guessingGame(int x, int y) {
+		int q = 0;
 		int range = y - x + 1;
 		return (int)(Math.random() * range) + x;
+		
 	}
 }
