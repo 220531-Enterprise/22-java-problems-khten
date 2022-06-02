@@ -2,9 +2,10 @@ package com.revature.eval.java.core;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class EvaluationService {
 
@@ -26,7 +27,7 @@ public class EvaluationService {
 		public static long toMilesPerHour(double kilometersPerHour) {
 			if(kilometersPerHour < 0) return -1;
 			if(kilometersPerHour > 0) {
-				long mph = (long) (kilometersPerHour / 1.069);
+				long mph = (long) (kilometersPerHour / 1.5);
 				return Math.round(mph);
 			}
 			// TODO Write an implementation for this method declaration
@@ -49,7 +50,7 @@ public class EvaluationService {
 		 * Value"
 		 */
 		public static String printConversion(double kilometersPerHour) {
-
+            if(kilometersPerHour < 0) return "Invalid Value";
 			if(kilometersPerHour >= 0) {
 				return kilometersPerHour + " km/h = " + toMilesPerHour(kilometersPerHour)+ " mi/h";
 			}
@@ -390,7 +391,7 @@ public class EvaluationService {
 	 * 3 + 2*1 + 2*3 + 2 + 1 = 3 + 2 + 6 + 3 = 5 + 9 = 14
 	 */
 	public int getScrabbleScore(String string) {
-		
+		string = string.toUpperCase();
 		int score = 0;
 		for(int i = 0; i < string.length(); ++i) {
 			switch(string.charAt(i)) {
@@ -447,13 +448,18 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
-	public String cleanPhoneNumber(String string) {
+	public String cleanPhoneNumber(String string) throws IllegalArgumentException{
 		String[] nums = string.split("[^0-9]");
 		
 		String res ="";
 		for(int i = 0; i < nums.length; ++i) {
+		  
 		  if(nums[i] == null || nums[i].length() < 2) continue;
 		  else res += nums[i];
+		 
+		}
+		if(res.length()>10  || res.length()<10) {
+			throw  new IllegalArgumentException();
 		}
 		return res;
 	}
@@ -467,8 +473,18 @@ public class EvaluationService {
 	 * free: 1
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> res = new TreeMap<String,Integer>();
+		
+		String[] words = string.split(" ");
+		for(String s: words) {
+			if(res.containsKey(s)) {
+				res.put(s, res.get(s) + 1);
+			}else {
+				res.put(s,1);
+			}
+		}
+		
+		return res;
 	}
 
 	/**
@@ -486,7 +502,15 @@ public class EvaluationService {
 	 * a number is an Armstrong number.
 	 */
 	public boolean isArmstrongNumber(int input) {
-		return false;
+		String s = Integer.toString(input);
+		int numOfDigits = s.length();
+		int sum = 0;
+		int holder = input;
+		for(int i = 0; i < numOfDigits; ++i) {
+			holder %= 10;
+			sum += Math.pow(holder, numOfDigits);
+		}
+		return sum == input;
 	}
 
 	/**
@@ -498,8 +522,26 @@ public class EvaluationService {
 	 * Note that 1 is not a prime number.
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
+		
+		List<Long> result = new ArrayList<Long>();
+		long temp = l;
+	    if(l < 2) return result;
+		for(int i =2 ; i < l; ++i) {
+			while(isPrime(i)  && (temp % i == 0)) {
+				result.add(temp);
+				temp /= i;
+			}
+		}
 		// TODO Write an implementation for this method declaration
-		return null;
+		return result;
+	}
+	private boolean isPrime(long n) {
+		if(n == 2) return true;
+		if(n % 2 == 0) return false;
+		for(int i = 3; i < Math.sqrt(n); i += 2) {
+			if(n % i == 0) return false;
+		}
+		return true;
 	}
 
 	/**
