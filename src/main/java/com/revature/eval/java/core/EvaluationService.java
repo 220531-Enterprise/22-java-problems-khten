@@ -3,9 +3,11 @@ package com.revature.eval.java.core;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Random;
+import java.util.TreeSet;
 
 public class EvaluationService {
 
@@ -23,14 +25,19 @@ public class EvaluationService {
 	 * and return it. For conversion and rounding use Math.round().
 	 */
 	static class SpeedConverter {
-
+         /**
+          * Uses a conversion factor of 1 KPH = 1.5 MPH
+          * @param kilometersPerHour
+          * @return
+          */
 		public static long toMilesPerHour(double kilometersPerHour) {
 			if(kilometersPerHour < 0) return -1;
 			if(kilometersPerHour > 0) {
+			
 				long mph = (long) (kilometersPerHour / 1.5);
 				return Math.round(mph);
 			}
-			// TODO Write an implementation for this method declaration
+			
 			return 0;
 		}
 
@@ -54,7 +61,7 @@ public class EvaluationService {
 			if(kilometersPerHour >= 0) {
 				return kilometersPerHour + " km/h = " + toMilesPerHour(kilometersPerHour)+ " mi/h";
 			}
-			// TODO Write an implementation for this method declaration
+			
 			return null;
 		}
 	}
@@ -88,7 +95,7 @@ public class EvaluationService {
 			return "Invalid Value";
 		}
 		return XX + " KB = " + megs + " MB and " + kb + " KB";
-		// TODO Write an implementation for this method declaration
+		// 
 
 	}
 
@@ -133,7 +140,7 @@ public class EvaluationService {
 
 		return  (df.format(firstNum)).equals(df.format(secondNum)); 
 
-		// TODO Write an implementation for this method declaration
+		
 
 	}
 
@@ -150,8 +157,7 @@ public class EvaluationService {
 	static class TeenNumberChecker {
 
 		public static boolean hasTeen(int x, int y, int z) {
-			// TODO Write an implementation for this method declaration
-			//Only if ONE 
+			
 			return (isTeen(x) || isTeen(y) || isTeen(z));
 		}
 
@@ -159,7 +165,7 @@ public class EvaluationService {
 		// Then pass the parameter to hasTeen method
 
 		public static boolean isTeen(int number) {
-			// TODO Write an implementation for this method declaration
+			
 			return (number >= 13 && number <=19);
 		}
 	}
@@ -180,8 +186,7 @@ public class EvaluationService {
 	 * ZZ represents the calculated days.
 	 */
 	public String printYearsAndDays(long minutes) {
-		// TODO Write an implementation for this method declaration
-
+		
 		if(minutes < 0) return "Invalid Value";
 		long years =  minutes / 525_600;
 		long remMin = minutes % 525_600;
@@ -216,8 +221,7 @@ public class EvaluationService {
 		default: return "OTHER";
 
 		}
-		// TODO Write an implementation for this method declaration
-
+		
 	}
 
 	/**
@@ -245,7 +249,6 @@ public class EvaluationService {
 		for(int i = Math.min(first,second); i > 0; i--) {
 			if((first % i == 0) && (second % i == 0)) return i;
 		}
-		// TODO Write an implementation for this method declaration
 		return 0;
 	}
 
@@ -271,7 +274,6 @@ public class EvaluationService {
 		int lastDigit = num % 10;
 		
 		return firstDigit + lastDigit;
-		// TODO Write an implementation for this method declaration
 		
 	}
 
@@ -287,7 +289,7 @@ public class EvaluationService {
 		   res += string.charAt(i);	
 		}
 		return res;
-		// TODO Write an implementation for this method declaration
+		
 	
 	}
 
@@ -299,12 +301,14 @@ public class EvaluationService {
 	 * long name like Portable Network Graphics to its acronym (PNG).
 	 */
 	public String acronym(String phrase) {
-		String[] words = phrase.split(" ");
+	   
+		String[] words = phrase.split(" |[-]");
 		String res = "";
 		for(String s: words) {
+			s = s.toUpperCase();
 			res += s.charAt(0);
 		}
-		// TODO Write an implementation for this method declaration
+		
 		return res;
 	}
 
@@ -370,7 +374,7 @@ public class EvaluationService {
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			
 			return !(isEquilateral() || isIsosceles());
 		}
 
@@ -449,8 +453,9 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) throws IllegalArgumentException{
-		String[] nums = string.split("[^0-9]");
 		
+		String[] nums = string.split("[^0-9]");
+		if(nums.length == 4 && !nums[0].equals("1")) throw new IllegalArgumentException();
 		String res ="";
 		for(int i = 0; i < nums.length; ++i) {
 		  
@@ -473,10 +478,13 @@ public class EvaluationService {
 	 * free: 1
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		Map<String, Integer> res = new TreeMap<String,Integer>();
+		Map<String, Integer> res = new HashMap<String,Integer>();
 		
-		String[] words = string.split(" ");
+		
+		String[] words = string.split("[^a-z]");
 		for(String s: words) {
+			s = s.toLowerCase().trim();
+			if(s.equals("")) continue;
 			if(res.containsKey(s)) {
 				res.put(s, res.get(s) + 1);
 			}else {
@@ -503,16 +511,21 @@ public class EvaluationService {
 	 */
 	public boolean isArmstrongNumber(int input) {
 		String s = Integer.toString(input);
+		
 		int numOfDigits = s.length();
-		int sum = 0;
+		long sum = 0;
 		int holder = input;
 		for(int i = 0; i < numOfDigits; ++i) {
-			holder %= 10;
-			sum += Math.pow(holder, numOfDigits);
+			//get every digit in the 1's place
+			
+			sum += Math.pow(holder % 10, numOfDigits);
+			holder /=10;
 		}
 		return sum == input;
 	}
 
+	
+	
 	/**
 	 * 17. Prime Factors
 	 * 
@@ -521,24 +534,50 @@ public class EvaluationService {
 	 * 
 	 * Note that 1 is not a prime number.
 	 */
+	
 	public List<Long> calculatePrimeFactorsOf(long l) {
+		ArrayList<Long> primes = getPrimeNumbersUpToN(l);
 		
-		List<Long> result = new ArrayList<Long>();
-		long temp = l;
-	    if(l < 2) return result;
-		for(int i =2 ; i < l; ++i) {
-			while(isPrime(i)  && (temp % i == 0)) {
-				result.add(temp);
-				temp /= i;
+		ArrayList<Long> result = new ArrayList<Long>();
+		Long temp = l;
+		for(int i = 0; i < primes.size()  && temp != 1; ++i) {
+			long j = primes.get(i);
+			while(temp % j == 0) {
+				temp /= j;
+				result.add(j);
 			}
 		}
-		// TODO Write an implementation for this method declaration
+		
+		
 		return result;
+		
+		
 	}
-	private boolean isPrime(long n) {
+	/**
+	 * Helper method that will return a list containing all prime numbers less than n
+	 * @param l The maximum value that could occur in the returned list
+	 * @return An ArrayList containing all prime numbers up to n;
+	 */
+	private static ArrayList<Long> getPrimeNumbersUpToN(long l){
+		if(l < 1) return null;
+		ArrayList<Long> primeNumberList = new ArrayList<Long>();
+		primeNumberList.add((long) 2);
+		
+		for(long i = 3; i < l; i += 2) {
+			
+			if(isPrime(i)) primeNumberList.add(i);
+		}
+		return primeNumberList;
+	}
+	/**
+	 * Determines is a number is prime
+	 * @param n The number being checked to see if it is prime
+	 * @return b true if n is prime and false if it is not
+	 */
+	private static boolean isPrime(long n) {
 		if(n == 2) return true;
 		if(n % 2 == 0) return false;
-		for(int i = 3; i < Math.sqrt(n); i += 2) {
+		for(int i = 2; i < n; i++) {
 			if(n % i == 0) return false;
 		}
 		return true;
@@ -556,8 +595,18 @@ public class EvaluationService {
 	 * numbers, pretend they don't exist and implement them yourself.
 	 */
 	public int calculateNthPrime(int k) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		if(k < 1) throw new IllegalArgumentException();
+		if(k == 1) return 2;
+		int j = 2; //current prime number
+		int lastPrime = 2;
+		for(int i = 0; i < k; ++j) {
+		    if(isPrime(j)) {
+		    	++i;
+		    	lastPrime = j;
+		    }
+		}
+		return lastPrime;
 	}
 
 	/**
@@ -573,8 +622,13 @@ public class EvaluationService {
 	 * insensitive. Input will not contain non-ASCII symbols.
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		string = string.toLowerCase();
+		for(char c = 'a'; c <= 'z'; c++) {
+			if( !string.contains(c +"")) return false;
+			
+		}
+		
+		return true;
 	}
 
 	/**
@@ -589,7 +643,23 @@ public class EvaluationService {
 	 * The sum of these multiples is 78.
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		return 0;
+		TreeSet<Integer> multiples = new TreeSet<Integer>();
+
+		for(int j = 0; j < set.length; ++j)
+		{
+			int k = set[j];
+			int multiple = 1;
+			while(k * multiple < i) {
+				
+				multiples.add(k * multiple);
+				multiple++;
+			}
+		}
+		int sum = 0;
+		for(Integer z : multiples) {
+			sum += z;
+		}
+		return sum;
 	}
 
 	/**
@@ -603,7 +673,9 @@ public class EvaluationService {
 	 */
 
 	public int[] threeLuckyNumbers() {
-		return null;
+		Random r = new Random();
+		int[] res = { r.nextInt(1, 101), r.nextInt(1,101), r.nextInt(1,101)};
+		return res;
 	}
 
 	/*
@@ -617,6 +689,7 @@ public class EvaluationService {
 	 */
 
 	public int guessingGame(int x, int y) {
-		return 0;
+		int range = y - x + 1;
+		return (int)(Math.random() * range) + x;
 	}
 }
