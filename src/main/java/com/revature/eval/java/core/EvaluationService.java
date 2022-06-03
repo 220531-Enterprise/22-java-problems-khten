@@ -559,7 +559,7 @@ public class EvaluationService {
 	 * @param l The maximum value that could occur in the returned list
 	 * @return An ArrayList containing all prime numbers up to n;
 	 */
-	public static ArrayList<Long> getPrimeNumbersUpToN(long l){
+	public  ArrayList<Long> getPrimeNumbersUpToN(long l){
 		if(l < 1) return null;
 		ArrayList<Long> primeNumberList = new ArrayList<Long>();
 		primeNumberList.add((long) 2);
@@ -575,7 +575,7 @@ public class EvaluationService {
 	 * @param n The number being checked to see if it is prime
 	 * @return b true if n is prime and false if it is not
 	 */
-	public static boolean isPrime(long n) {
+	public  boolean isPrime(long n) {
 		if(n == 2) return true;
 		if(n % 2 == 0) return false;
 		for(int i = 2; i < n; i++) {
@@ -675,7 +675,11 @@ public class EvaluationService {
 
 	public int[] threeLuckyNumbers() {
 		Random r = new Random();
-		int[] res = { r.nextInt(1, 101), r.nextInt(1,101), r.nextInt(1,101)};
+		
+		int r1 = r.nextInt(100) + 1;
+		int r2 = r.nextInt(100) + 1;
+		int r3 = r.nextInt(100) + 1;
+		int[] res = { r1, r2, r3};
 		return res;
 	}
 
