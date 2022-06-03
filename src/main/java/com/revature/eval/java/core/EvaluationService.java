@@ -26,7 +26,7 @@ public class EvaluationService {
 	 */
 	static class SpeedConverter {
          /**
-          * Uses a conversion factor of 1 KPH = 1.5 MPH
+          * Uses a conversion factor of 1 KPH = 0.621371
           * @param kilometersPerHour
           * @return
           */
@@ -34,7 +34,7 @@ public class EvaluationService {
 			if(kilometersPerHour < 0) return -1;
 			if(kilometersPerHour > 0) {
 			
-				long mph = (long) (kilometersPerHour / 1.5);
+				long mph = (long) (kilometersPerHour * 0.621371);
 				return Math.round(mph);
 			}
 			
